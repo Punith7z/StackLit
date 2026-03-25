@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <meta name="description" content="<%= book.description %>" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>" />
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <div class="main-content">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" style="padding-top:24px">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="/search">Books</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="/subject/<%= encodeURIComponent(book.subject) %>"><%= book.subject %></a>
+      <span class="breadcrumb-sep">›</span>
+      <span><%= book.title %></span>
+    </div>
+
+    <!-- Book Detail -->
+    <div class="book-detail">
+
+      <!-- Left: Cover + Purchase -->
+      <div class="book-detail-cover">
+        <div class="book-detail-cover-card">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:10px">Semester <%= book.semester %></div>
+          <div class="book-detail-cover-abbr">
+            <%= book.subject.split(' ').map(w => w[0]).join('').slice(0, 4) %>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:0.9rem;color:rgba(255,255,255,0.75);margin-top:10px;line-height:1.4"><%= book.subject %></div>
+          <div class="book-detail-cover-sub" style="margin-top:6px"><%= book.stream %></div>
+
+          <% if (book.rating >= 4.7) { %>
+            <div style="margin-top:16px;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);border-radius:20px;padding:5px 14px;display:inline-block">
+              <span style="font-size:0.72rem;font-weight:700;color:#fbbf24;letter-spacing:0.06em">⭐ TOP PICK</span>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Price Card -->
+        <div class="detail-price-card">
+          <div class="detail-price">₹<%= book.price %></div>
+          <div class="detail-price-label">MRP · All formats</div>
+          <a href="#" class="btn-buy">📦 Add to Cart</a>
+          <a href="#" class="btn-wishlist">♡ Save to Wishlist</a>
+
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--slate-100)">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--slate-500);margin-bottom:6px">
+              <span>✅</span> <%= book.available ? 'In Stock' : 'Out of Stock' %>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--slate-500);margin-bottom:6px">
+              <span>📄</span> <%= book.pages %> pages
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--slate-500);margin-bottom:6px">
+              <span>🌐</span> <%= book.language %>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--slate-500)">
+              <span>📘</span> <%= book.edition %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Book Info -->
+      <div class="book-detail-info">
+        <div class="book-detail-subject"><%= book.subject %> · Semester <%= book.semester %></div>
+        <h1 class="book-detail-title"><%= book.title %></h1>
+        <div class="book-detail-author">by <strong><%= book.author %></strong></div>
+
+        <!-- Rating -->
+        <div class="book-detail-rating">
+          <span class="rating-stars">
+            <% for(let i = 1; i <= 5; i++) { %>
+              <%= i <= Math.round(book.rating) ? '★' : '☆' %>
+            <% } %>
+          </span>
+          <span class="rating-num"><%= book.rating %></span>
+          <span class="rating-count">(<%= book.reviews.toLocaleString() %> reviews)</span>
+          <% if (book.rating >= 4.7) { %>
+            <span style="background:var(--gold-light);color:var(--gold);font-size:0.72rem;font-weight:700;padding:3px 9px;border-radius:20px">Top Rated</span>
+          <% } %>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-item-label">Publisher</div>
+            <div class="info-item-value"><%= book.publisher %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">Edition</div>
+            <div class="info-item-value"><%= book.edition %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">Stream</div>
+            <div class="info-item-value"><%= book.stream %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">Semester</div>
+            <div class="info-item-value">Semester <%= book.semester %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">Pages</div>
+            <div class="info-item-value"><%= book.pages.toLocaleString() %></div>
+          </div>
+          <div class="info-item">
+            <div class="info-item-label">ISBN</div>
+            <div class="info-item-value" style="font-size:0.78rem"><%= book.isbn %></div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:10px;color:var(--slate-900)">About This Book</h3>
+        <p class="book-description"><%= book.description %></p>
+
+        <!-- Specialty -->
+        <div class="specialty-box">
+          <div class="specialty-box-label">📌 Why Students Love This Book</div>
+          <div class="specialty-box-text"><%= book.specialty %></div>
+        </div>
+
+        <!-- Tags -->
+        <h3 style="font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:10px;color:var(--slate-700)">Topics Covered</h3>
+        <div class="tags-list">
+          <% book.tags.forEach(tag => { %>
+            <a href="/search?q=<%= encodeURIComponent(tag) %>" class="tag">#<%= tag %></a>
+          <% }) %>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Related Books -->
+    <% if (related.length > 0) { %>
+      <div class="divider"></div>
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <div class="section-label">You May Also Like</div>
+            <div class="section-title">Related Books</div>
+          </div>
+        </div>
+        <div class="books-grid books-grid-lg">
+          <% related.forEach(book => { %>
+            <%- include('partials/bookCard', { book }) %>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+
+  </div>
+
+  <%- include('partials/footer') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!-- StackLit Navbar -->
+<nav class="navbar">
+  <div class="nav-inner">
+
+    <!-- Brand -->
+    <a href="/" class="nav-brand">
+      <div class="nav-brand-icon">SL</div>
+      <span class="nav-brand-text">Stack<span>Lit</span></span>
+    </a>
+
+    <!-- Search Bar -->
+    <div class="nav-search">
+      <form action="/search" method="GET">
+        <svg class="nav-search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          name="q"
+          value="<%= typeof query !== 'undefined' ? query : '' %>"
+          placeholder="Search books, subjects, authors..."
+          class="nav-search-input"
+          autocomplete="off"
+        />
+        <button type="submit" class="nav-search-btn">Search</button>
+      </form>
+      <div class="autocomplete-dropdown"></div>
+    </div>
+
+    <!-- Nav Links -->
+    <ul class="nav-links">
+      <li><a href="/" class="<%= typeof title !== 'undefined' && title.includes('Home') ? 'active' : '' %>">Home</a></li>
+      <li><a href="/search">Browse</a></li>
+      <li><a href="/search?sort=rating">Top Rated</a></li>
+      <li><a href="/search?semester=1">Semester 1</a></li>
+      <li><a href="/search" class="nav-cta">All Books</a></li>
+    </ul>
+
+  </div>
+</nav>

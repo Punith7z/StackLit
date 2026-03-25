@@ -1,0 +1,29 @@
+<!-- Book Card Component: Usage: include('./partials/bookCard', { book: book }) -->
+<a href="/book/<%= book.id %>" style="text-decoration:none">
+  <div class="book-card">
+    <div class="book-cover">
+      <div class="book-cover-inner">
+        <div class="book-cover-sem">Sem <%= book.semester %>
+        </div>
+        <div class="book-cover-abbr">
+          <%= book.subject.split(' ').map(w => w[0]).join('').slice(0,4) %></div>
+      </div>
+      <% if (book.rating >= 4.7) { %>
+        <span class="book-badge-new">⭐ Top Pick</span>
+      <% } %>
+    </div>
+    <div class="book-info">
+      <div class="book-subject"><%= book.subject %></div>
+      <div class="book-title"><%= book.title %></div>
+      <div class="book-author"><%= book.author %></div>
+      <div class="book-meta">
+        <div class="book-rating">
+          <span class="star">★</span>
+          <span><%= book.rating %></span>
+        </div>
+        <span class="book-sem-tag">Sem <%= book.semester %></span>
+        <span class="book-price">₹<%= book.price %></span>
+      </div>
+    </div>
+  </div>
+</a>

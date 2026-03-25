@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>" />
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <div class="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span><% if (query) { %>Search: "<%= query %>"<% } else if (filters.stream) { %><%= filters.stream %><% } else if (filters.subject) { %><%= filters.subject %><% } else { %>All Books<% } %></span>
+      </div>
+      <div class="page-header-inner" style="margin-top:12px">
+        <div class="page-header-icon">🔍</div>
+        <div>
+          <div class="page-header-title">
+            <% if (query) { %>
+              Results for "<%= query %>"
+            <% } else if (filters.stream) { %>
+              <%= filters.stream %> Books
+            <% } else if (filters.subject) { %>
+              <%= filters.subject %>
+            <% } else { %>
+              Browse All Books
+            <% } %>
+          </div>
+          <div class="page-header-sub"><%= totalResults %> book<%= totalResults !== 1 ? 's' : '' %> found</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Layout -->
+    <div class="search-page">
+
+      <!-- ── Filter Sidebar ── -->
+      <aside class="filter-sidebar">
+        <div class="filter-card">
+          <div class="filter-title">
+            Filters
+            <a href="/search" class="filter-clear">Clear all</a>
+          </div>
+
+          <form action="/search" method="GET" id="filter-form">
+            <!-- Hidden query -->
+            <input type="hidden" name="q" value="<%= query %>" />
+
+            <div class="filter-group">
+              <label class="filter-label">Stream / Branch</label>
+              <select name="stream" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Streams</option>
+                <% streams.forEach(s => { %>
+                  <option value="<%= s %>" <%= filters.stream === s ? 'selected' : '' %>><%= s %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Subject</label>
+              <select name="subject" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Subjects</option>
+                <% subjects.forEach(s => { %>
+                  <option value="<%= s %>" <%= filters.subject === s ? 'selected' : '' %>><%= s %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Semester</label>
+              <select name="semester" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Semesters</option>
+                <% [1,2,3,4,5,6,7,8].forEach(sem => { %>
+                  <option value="<%= sem %>" <%= filters.semester == sem ? 'selected' : '' %>><%= sem %><%= ['st','nd','rd','th','th','th','th','th'][sem-1] %> Semester</option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="filter-label">Sort By</label>
+              <select name="sort" class="filter-select" id="sort-select">
+                <option value="relevance" <%= filters.sort === 'relevance' ? 'selected' : '' %>>Relevance</option>
+                <option value="rating" <%= filters.sort === 'rating' ? 'selected' : '' %>>Highest Rated</option>
+                <option value="reviews" <%= filters.sort === 'reviews' ? 'selected' : '' %>>Most Reviewed</option>
+                <option value="price_asc" <%= filters.sort === 'price_asc' ? 'selected' : '' %>>Price: Low to High</option>
+                <option value="price_desc" <%= filters.sort === 'price_desc' ? 'selected' : '' %>>Price: High to Low</option>
+              </select>
+            </div>
+
+            <button type="submit" class="filter-btn">Apply Filters</button>
+          </form>
+        </div>
+
+        <!-- Semester Quick Links -->
+        <div class="filter-card">
+          <div class="filter-title">Quick Semesters</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <% [1,2,3,4,5,6,7,8].forEach(sem => { %>
+              <a href="/search?semester=<%= sem %>" style="
+                display:flex;align-items:center;gap:10px;
+                padding:8px 10px;border-radius:9px;font-size:0.84rem;
+                color:var(--slate-700);font-weight:500;
+                background:<%= filters.semester == sem ? 'var(--blue-50)' : 'transparent' %>;
+                color:<%= filters.semester == sem ? 'var(--blue-700)' : 'var(--slate-700)' %>;
+                border:1px solid <%= filters.semester == sem ? 'var(--blue-100)' : 'transparent' %>;
+                transition:all 0.15s;text-decoration:none;
+              "
+              onmouseover="this.style.background='var(--blue-50)';this.style.color='var(--blue-700)'"
+              onmouseout="this.style.background='<%= filters.semester == sem ? 'var(--blue-50)' : 'transparent' %>';this.style.color='<%= filters.semester == sem ? 'var(--blue-700)' : 'var(--slate-700)' %>'">
+                <span style="width:24px;height:24px;background:var(--slate-100);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:var(--slate-600)"><%= sem %></span>
+                Semester <%= sem %>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── Results Area ── -->
+      <div>
+        <!-- Results Header -->
+        <div class="search-results-header">
+          <div>
+            <div class="search-results-title">
+              <% if (query) { %>
+                "<%= query %>"
+              <% } else if (filters.stream) { %>
+                <%= filters.stream %>
+              <% } else { %>
+                All Books
+              <% } %>
+            </div>
+            <div class="search-results-count">
+              Showing <%= totalResults %> result<%= totalResults !== 1 ? 's' : '' %>
+            </div>
+          </div>
+          <form action="/search" method="GET" style="display:flex;align-items:center;gap:8px">
+            <input type="hidden" name="q" value="<%= query %>" />
+            <input type="hidden" name="stream" value="<%= filters.stream %>" />
+            <input type="hidden" name="subject" value="<%= filters.subject %>" />
+            <input type="hidden" name="semester" value="<%= filters.semester %>" />
+            <select name="sort" class="sort-select" onchange="this.form.submit()">
+              <option value="relevance" <%= filters.sort === 'relevance' ? 'selected' : '' %>>Sort: Relevance</option>
+              <option value="rating" <%= filters.sort === 'rating' ? 'selected' : '' %>>Sort: Rating</option>
+              <option value="reviews" <%= filters.sort === 'reviews' ? 'selected' : '' %>>Sort: Reviews</option>
+              <option value="price_asc" <%= filters.sort === 'price_asc' ? 'selected' : '' %>>Sort: Price ↑</option>
+              <option value="price_desc" <%= filters.sort === 'price_desc' ? 'selected' : '' %>>Sort: Price ↓</option>
+            </select>
+          </form>
+        </div>
+
+        <!-- Active Filters Tags -->
+        <% if (filters.stream || filters.subject || filters.semester || query) { %>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">
+            <% if (query) { %>
+              <span style="display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:500">
+                🔍 "<%= query %>"
+                <a href="/search?stream=<%= filters.stream %>&subject=<%= filters.subject %>&semester=<%= filters.semester %>" style="color:var(--blue-500);font-weight:700;margin-left:2px">×</a>
+              </span>
+            <% } %>
+            <% if (filters.stream) { %>
+              <span style="display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:500">
+                📌 <%= filters.stream %>
+                <a href="/search?q=<%= query %>&subject=<%= filters.subject %>&semester=<%= filters.semester %>" style="color:var(--blue-500);font-weight:700;margin-left:2px">×</a>
+              </span>
+            <% } %>
+            <% if (filters.subject) { %>
+              <span style="display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:500">
+                📖 <%= filters.subject %>
+                <a href="/search?q=<%= query %>&stream=<%= filters.stream %>&semester=<%= filters.semester %>" style="color:var(--blue-500);font-weight:700;margin-left:2px">×</a>
+              </span>
+            <% } %>
+            <% if (filters.semester) { %>
+              <span style="display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:500">
+                📅 Semester <%= filters.semester %>
+                <a href="/search?q=<%= query %>&stream=<%= filters.stream %>&subject=<%= filters.subject %>" style="color:var(--blue-500);font-weight:700;margin-left:2px">×</a>
+              </span>
+            <% } %>
+          </div>
+        <% } %>
+
+        <!-- Book Grid -->
+        <% if (results.length === 0) { %>
+          <div class="no-results">
+            <div class="no-results-icon">📭</div>
+            <h3>No books found</h3>
+            <p>Try a different search term or adjust your filters.</p>
+            <a href="/search" style="display:inline-block;margin-top:16px;background:var(--blue-700);color:white;padding:10px 24px;border-radius:50px;font-size:0.88rem;font-weight:600">Browse All Books</a>
+          </div>
+        <% } else { %>
+          <div class="search-results-grid">
+            <% results.forEach(book => { %>
+              <%- include('partials/bookCard', { book }) %>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>

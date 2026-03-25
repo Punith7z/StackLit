@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <%= title %>
+  </title>
+  <meta name="description"
+    content="StackLit - The smartest VTU Engineering Book recommendation platform. Find top-rated textbooks by subject, stream, and semester." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>" />
+</head>
+
+<body>
+
+  <%- include('./partials/navbar.ejs') %>
+
+    <!-- ─── HERO ─────────────────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-tag">
+            <span>📚</span>
+            VTU Engineering · 50+ Curated Books
+          </div>
+          <h1>
+            Find the Right Book for <em>Every Semester</em>
+          </h1>
+          <p>
+            StackLit is your intelligent guide to VTU engineering textbooks —
+            curated, rated, and organized by subject, stream, and semester.
+          </p>
+          <div class="hero-actions">
+            <a href="/search" class="btn-primary">
+              Browse All Books
+              <span>→</span>
+            </a>
+            <a href="/search?sort=rating" class="btn-ghost">
+              <span>⭐</span>
+              Top Rated
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-num">50+</div>
+              <div class="hero-stat-label">Curated Books</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">8</div>
+              <div class="hero-stat-label">Semesters</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">6</div>
+              <div class="hero-stat-label">Streams</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">4.5★</div>
+              <div class="hero-stat-label">Avg Rating</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book Stack Visual -->
+        <div class="hero-visual">
+          <div class="book-stack">
+            <div class="book-card-hero">
+              <div class="book-subject-badge">Mathematics</div>
+              <div class="book-title-mini">Engineering Mathematics I</div>
+            </div>
+            <div class="book-card-hero">
+              <div class="book-subject-badge">Algorithms</div>
+              <div class="book-title-mini">CLRS Introduction to Algorithms</div>
+            </div>
+            <div class="book-card-hero">
+              <div class="book-subject-badge">CSE · Sem 5</div>
+              <div class="book-title-mini">Operating System Concepts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── STREAMS ───────────────────────────────────────────────────────── -->
+    <section class="section-sm streams-section">
+      <div class="main-content">
+        <div class="section-header">
+          <div>
+            <div class="section-label">Browse by Stream</div>
+            <div class="section-title">Pick Your Branch</div>
+          </div>
+        </div>
+        <div class="streams-scroll">
+          <a href="/search" class="stream-pill">
+            <div class="stream-pill-icon">📚</div>
+            <span class="stream-pill-name">All Books</span>
+            <span class="stream-pill-count">50</span>
+          </a>
+          <% const streamIcons={ 'Common to All' : '🏫' , 'CSE / ISE' : '💻' , 'ECE' : '📡' , 'ECE / EEE' : '⚡' , 'EEE'
+            : '🔌' , 'Mechanical' : '⚙️' , 'Civil' : '🏗️' , 'Civil / Mechanical' : '🔧' , 'ECE / CSE' : '🖥️'
+            , 'Mechanical / ECE' : '🤖' , 'CSE / ISE' : '💻' }; %>
+            <% const streamCounts={}; %>
+              <% streams.forEach(stream=> { %>
+                <a href="/stream/<%= encodeURIComponent(stream) %>" class="stream-pill">
+                  <div class="stream-pill-icon">
+                    <%= streamIcons[stream] || '📖' %>
+                  </div>
+                  <span class="stream-pill-name">
+                    <%= stream %>
+                  </span>
+                </a>
+                <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ─── FEATURED ──────────────────────────────────────────────────────── -->
+    <section class="section">
+      <div class="main-content">
+        <div class="section-header">
+          <div>
+            <div class="section-label">Editor's Choice</div>
+            <div class="section-title">Highest Rated Books</div>
+          </div>
+          <a href="/search?sort=rating" class="section-link">View all →</a>
+        </div>
+        <div class="books-grid books-grid-lg">
+          <% featured.forEach(book=> { %>
+            <%- include('partials/bookCard', { book: book }) %>
+              <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ─── TRENDING ──────────────────────────────────────────────────────── -->
+    <section class="section bg-subtle">
+      <div class="main-content">
+        <div class="section-header">
+          <div>
+            <div class="section-label">🔥 Trending Now</div>
+            <div class="section-title">Most Popular This Semester</div>
+          </div>
+          <a href="/search?sort=reviews" class="section-link">See all →</a>
+        </div>
+        <div class="books-grid">
+          <% trending.forEach(book=> { %>
+            <%- include('./partials/bookCard.ejs', { book: book }) %>
+              <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ─── QUICK BROWSE BY SEMESTER ─────────────────────────────────────── -->
+    <section class="section">
+      <div class="main-content">
+        <div class="section-header">
+          <div>
+            <div class="section-label">Organized by Semester</div>
+            <div class="section-title">Find by Semester</div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+          <% [1,2,3,4,5,6,7,8].forEach(sem=> { %>
+            <a href="/search?semester=<%= sem %>" style="
+            display:block;
+            background: var(--white);
+            border: 1.5px solid var(--slate-200);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s;
+            text-decoration: none;
+          " onmouseover="this.style.borderColor='var(--blue-500)';this.style.background='var(--blue-50)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(26,86,219,0.12)'"
+              onmouseout="this.style.borderColor='var(--slate-200)';this.style.background='var(--white)';this.style.transform='none';this.style.boxShadow='none'">
+              <div style="font-size:1.6rem; margin-bottom:6px">📘</div>
+              <div
+                style="font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--slate-900)">
+                Sem <%= sem %>
+              </div>
+              <div style="font-size:0.76rem;color:var(--slate-500);margin-top:3px">Browse Books →</div>
+            </a>
+            <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ─── NEW ARRIVALS ──────────────────────────────────────────────────── -->
+    <section class="section bg-blue-subtle">
+      <div class="main-content">
+        <div class="section-header">
+          <div>
+            <div class="section-label">Recently Added</div>
+            <div class="section-title">New in the Catalog</div>
+          </div>
+          <a href="/search" class="section-link">All books →</a>
+        </div>
+        <div class="books-grid">
+          <% newArrivals.forEach(book=> { %>
+            <%- include('./partials/bookCard.ejs', { book: book }) %>
+              <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CTA BANNER ────────────────────────────────────────────────────── -->
+    <section style="background: linear-gradient(135deg, var(--blue-900), var(--blue-700)); padding: 64px 5%;">
+      <div style="max-width:700px; margin:0 auto; text-align:center;">
+        <div
+          style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:12px">
+          StackLit · Built for VTU Students</div>
+        <h2
+          style="font-family:'Playfair Display',serif;font-size:2.2rem;color:white;margin-bottom:16px;letter-spacing:-0.5px">
+          Every Subject. Every Semester. One Platform.
+        </h2>
+        <p style="color:rgba(255,255,255,0.7);font-size:1rem;line-height:1.7;margin-bottom:32px">
+          Search across 50 hand-curated engineering textbooks with ratings, pricing, specialty highlights, and smart
+          recommendations.
+        </p>
+        <a href="/search" class="btn-primary" style="display:inline-flex">
+          Explore Full Catalog →
+        </a>
+      </div>
+    </section>
+
+    <%- include('./partials/footer.ejs') %>
+
+      <script src="/js/main.js"></script>
+</body>
+
+</html>
