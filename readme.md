@@ -1,6 +1,6 @@
-StackLit — Book Recommendation Platform
+MVJ ShelfIQ — Book Recommendation Platform
 
-StackLit is a web-based application designed to help students discover relevant academic books based on subject, semester, and quality indicators such as ratings. The platform emphasizes clarity in presentation and ease of navigation, enabling users to quickly identify useful resources.
+MVJ ShelfIQ is a web-based application designed to help students discover relevant academic books based on subject, semester, and quality indicators such as ratings. The platform emphasizes clarity in presentation and ease of navigation, enabling users to quickly identify useful resources.
 
 ⸻
 
@@ -30,7 +30,7 @@ Frontend HTML, CSS
 
 Project Structure
 
-StackLit/
+MVJ ShelfIQ/
 │
 ├── views/
 │ ├── index.ejs
@@ -55,8 +55,8 @@ Setup Instructions
 
 Clone the repository
 
-git clone https://github.com/your-username/stacklit.git
-cd stacklit
+git clone https://github.com/your-username/mvj-shelfiq.git
+cd mvj-shelfiq
 
 Install dependencies
 

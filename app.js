@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
   const subjects = getUniqueValues('subject');
 
   res.render('index', {
-    title: 'StackLit — VTU Engineering Books',
+    title: 'MVJ ShelfIQ — VTU Engineering Books',
     featured,
     trending,
     newArrivals,
@@ -78,7 +78,7 @@ app.get('/search', (req, res) => {
   const subjects = getUniqueValues('subject');
 
   res.render('search', {
-    title: `Search: ${q || 'All Books'} — StackLit`,
+    title: `Search: ${q || 'All Books'} — MVJ ShelfIQ`,
     results,
     query: q,
     filters: { subject, stream, semester, sort },
@@ -98,7 +98,7 @@ app.get('/book/:id', (req, res) => {
     .slice(0, 4);
 
   res.render('book', {
-    title: `${book.title} — StackLit`,
+    title: `${book.title} — MVJ ShelfIQ`,
     book,
     related
   });
@@ -112,7 +112,7 @@ app.get('/stream/:name', (req, res) => {
   const subjects = getUniqueValues('subject');
 
   res.render('search', {
-    title: `${streamName} Books — StackLit`,
+    title: `${streamName} Books — MVJ ShelfIQ`,
     results: books,
     query: '',
     filters: { subject: '', stream: streamName, semester: '', sort: 'relevance' },
@@ -130,7 +130,7 @@ app.get('/subject/:name', (req, res) => {
   const subjects = getUniqueValues('subject');
 
   res.render('search', {
-    title: `${subjectName} Books — StackLit`,
+    title: `${subjectName} Books — MVJ ShelfIQ`,
     results: books,
     query: '',
     filters: { subject: subjectName, stream: '', semester: '', sort: 'relevance' },
@@ -159,5 +159,5 @@ app.get('/api/suggest', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`\n  StackLit is running at http://localhost:${PORT}\n`);
+  console.log(`\n  MVJ ShelfIQ is running at http://localhost:${PORT}\n`);
 });

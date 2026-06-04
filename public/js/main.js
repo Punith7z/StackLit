@@ -1,4 +1,4 @@
-// ─── StackLit Client JS ───────────────────────────────────────────────────────
+// ─── MVJ ShelfIQ Client JS ───────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
 

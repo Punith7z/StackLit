@@ -1,7 +1,7 @@
 {
-  "name": "stacklit",
+  "name": "mvj-shelfiq",
   "version": "1.0.0",
-  "description": "StackLit — VTU Engineering Book Recommendation Platform",
+  "description": "MVJ ShelfIQ — VTU Engineering Book Recommendation Platform",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
